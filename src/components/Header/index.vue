@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     goSearch() {
-      console.log(this.keyword)
       this.$router.push({
         name: 'search',
         // path: '/search',
@@ -66,7 +65,7 @@ export default {
         // params: {
         //   keyword: this.keyword
         // }
-      })
+      }, (success)=> {}, (err)=>{})
     }
   },
 }
