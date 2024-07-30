@@ -59,12 +59,10 @@ export default {
       this.$router.push({
         name: 'search',
         // path: '/search',
-        query: {
-          keyword: this.keyword
-        },
-        // params: {
-        //   keyword: this.keyword
-        // }
+        query: this.$route.query || undefined,
+        params: {
+          keyword: this.keyword || undefined
+        }
       }, (success)=> {}, (err)=>{})
     }
   },

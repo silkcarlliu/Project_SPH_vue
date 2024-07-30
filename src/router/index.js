@@ -39,7 +39,7 @@ export default new VueRouter({
     },
     {
       name: "search",
-      path: "/search",
+      path: "/search/:keyword?",
       component: () => import("@/pages/Search"),
       // 1.將params參數作爲路由組件的屬性傳遞
       // props: true,

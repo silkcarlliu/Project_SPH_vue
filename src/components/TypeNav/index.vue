@@ -1,33 +1,25 @@
 <template lang="">
 <div class="type-nav">
-    <div class="container"  @mouseleave="leaveIndex">
+    <div class="container">
+      <div @mouseleave="leaveIndex" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
-        <nav class="nav">
-            <a href="###">服装城</a>
-            <a href="###">美妆馆</a>
-            <a href="###">尚品汇超市</a>
-            <a href="###">全球购</a>
-            <a href="###">闪购</a>
-            <a href="###">团购</a>
-            <a href="###">有趣</a>
-            <a href="###">秒杀</a>
-        </nav>
-        <div class="sort">
+        <transition name="sort">
+          <div class="sort" v-show="showSort">
             <div class="all-sort-list2" @click="goSearch">
                 <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" :class="{current:currentIndex === index}">
                     <h3 @mouseenter="changeIndex(index)">
-                        <a href="" :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
+                        <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
                     </h3>
                     <!-- 二三级分类 -->
                     <div class="item-list clearfix" :style="{display: currentIndex === index ? 'block' : 'none'}">
                         <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
                             <dl class="fore">
                                 <dt>
-                                    <a href="" :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
+                                    <a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
                                 </dt>
                                 <dd>
                                     <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                                        <a href="" :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
+                                        <a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
                                     </em>
                                 </dd>
                             </dl>
@@ -35,7 +27,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+          </div>
+        </transition>
+      </div>
+      <nav class="nav">
+        <a href="###">服装城</a>
+        <a href="###">美妆馆</a>
+        <a href="###">尚品汇超市</a>
+        <a href="###">全球购</a>
+        <a href="###">闪购</a>
+        <a href="###">团购</a>
+        <a href="###">有趣</a>
+        <a href="###">秒杀</a>
+      </nav>
     </div>
 </div>
 </template>
@@ -47,10 +51,16 @@ export default {
   data() {
     return {
       currentIndex: -1,
+      showSort: true,
     };
   },
   mounted() {
-    this.$store.dispatch("categoryList");
+    if (this.$route.path !== "/home") {
+      this.showSort = false;
+    }
+    // if (this.$store.state.home.categoryList.length === 0) {
+    //   this.$store.dispatch("categoryList");
+    // }
   },
   computed: {
     ...mapState({
@@ -63,26 +73,37 @@ export default {
     }, 50),
     leaveIndex() {
       this.currentIndex = -1;
+      if (this.$route.path !== "/home") {
+        this.showSort = false;
+      }
     },
     goSearch(event) {
       // 利用编程式导航和事件委派进行路由跳转
-      const element = event.target
-      const { categoryname, category1id, category2id, category3id } = element.dataset
+      const element = event.target;
+
+      const { categoryname, category1id, category2id, category3id } =
+        element.dataset;
       if (categoryname) {
-        let location = {name: 'search'}
-        let query = {categoryName: categoryname}
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
         if (category1id) {
-          query.category1Id = category1id
+          query.category1Id = category1id;
         } else if (category2id) {
-            query.category2Id = category2id
+          query.category2Id = category2id;
         } else if (category3id) {
-            query.category3Id = category3id
+          query.category3Id = category3id;
         }
 
-        location.query = query
-
-        this.$router.push(location)
+        if (this.$route.params) {
+          location.params = this.$route.params;
+        }
+        console.log(location, this.$route);
+        location.query = query;
+        this.$router.push(location);
       }
+    },
+    enterShow() {
+      this.showSort = true;
     },
   },
 };
@@ -209,6 +230,18 @@ export default {
         }
       }
     }
+
+    //过渡动画
+    .sort-enter {
+      height: 0;
+    }
+    .sort-enter-to {
+      height: 510px;
+    }
+    .sort-enter-active {
+      transition: all 0.5s linear;
+    }
+
   }
 }
 </style>
