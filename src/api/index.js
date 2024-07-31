@@ -19,6 +19,7 @@ export const reqGetFloorList = () => mockRequests({ url: "/floor", method: "get"
   "pageNo": 1, 
   "pageSize": 10, 
   "props": ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"], 
-  "trademark": "4:小米"}
+  "trademark": "4:小米"
+}
 */
 export const reqGetSearchInfo = (params={}) => requests({ url: "/list", method: "post", data: params });

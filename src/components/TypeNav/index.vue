@@ -97,7 +97,7 @@ export default {
         if (this.$route.params) {
           location.params = this.$route.params;
         }
-        console.log(location, this.$route);
+
         location.query = query;
         this.$router.push(location);
       }
@@ -109,6 +109,13 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+//所有a标签有下划线，并且显示鼠标光标
+a {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .type-nav {
   border-bottom: 2px solid #e1251b;
 
